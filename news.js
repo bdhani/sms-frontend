@@ -69,7 +69,6 @@ async function updateNews() {
 
 // Initial news update
 updateNews();
-const newsApiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/news/getNewsbyFilter?stocks=65b956bda5fc62b5de7d59e7&sentiment=all';
 
 // Function to fetch news data from the API
 async function fetchNews() {
