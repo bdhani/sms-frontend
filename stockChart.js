@@ -34,15 +34,17 @@ async function fetchData() {
 
 async function updateChart() {
     const newData = await fetchData();
+    let len = newData.data.logs.length;
+    let tim = newData.data.logs[len-1].createdAt;
+    let price = newData.data.logs[len-1].price;
 
     if (newData) {
+
         // Extend the existing chart traces with new data
         Plotly.extendTraces('stockPriceChart', {
-            x: [newData.data.logs.map(key => key.createdAt)],
-            y: [newData.data.logs.map(key => key.price)],
-        }, [0]); // Assuming the chart has a single trace (index 0)
-
-        // Update other UI elements if needed
+            x: [[tim]],
+            y: [[price]],
+        },[0]); 
         document.getElementById('companyName').innerText = newData.data.companyName;
         document.getElementById('price').innerText = newData.data.sellingPrice.toFixed(2);
         document.getElementById('valuation').innerText = newData.data.valuation.toFixed(2);
@@ -61,7 +63,7 @@ async function createChart() {
          chartData = [{
             x: data.data.logs.map( key => key.createdAt ),
             y: data.data.logs.map( key => key.price ),
-            type: 'line',
+            type: 'scatter',
             mode: 'lines+markers',
             marker: {color: 'blue'},
         }];
