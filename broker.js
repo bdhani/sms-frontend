@@ -6,8 +6,9 @@ async function populateStockOptions() {
         const stockDetails = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/getAllStocks`;
         const response = await fetch(stockDetails);
         const data = await response.json();
+        stockOptions = []
         stockOptions = data.data;
-        console.log(stockOptions)
+        // console.log(stockOptions)
         } catch (error) {
         console.error(`Error fetching stock details`, error);
         
@@ -21,6 +22,7 @@ async function populateStockOptions() {
         option.textContent = `${stock.companyName}`;
         stockSelection.appendChild(option);
     });
+
 }
 
 
@@ -29,8 +31,14 @@ async function fetchTeamDetails(teamId) {
         
         const teamDetailsEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/get?id=${teamId}`;
         const response = await fetch(teamDetailsEndpoint);
-        const data = await response.json();
-        return data.data;
+        if(response.status === 200) {
+            const data = await response.json();
+            return data.data;
+        } else {
+            document.getElementById('teamName').textContent = "N/A";
+            document.getElementById('availableBalance').textContent = 0.00;
+            alert(`Team not found with id: ${teamId}`)
+        }
     } catch (error) {
         console.error(`Error fetching team details for Team ID ${teamId}:`, error);
         return {};
@@ -39,11 +47,14 @@ async function fetchTeamDetails(teamId) {
 
 // Function to update team details and available balance
 async function updateTeamDetailsAndBalance() {
+    const stockSelection = document.getElementById('stockSelection');
+    stockSelection.value = ''
+    
     const teamId = document.getElementById('teamId').value;
-    console.log(typeof teamId)
+    // console.log(typeof teamId)
     // Fetch team details
     const teamDetails = await fetchTeamDetails(teamId);
-    console.log(teamDetails.teamId)
+    // console.log(teamDetails.teamId)
 
     // Update team details in the UI
     // document.getElementById('teamId').textContent = teamDetails.teamId || 'N/A';
@@ -105,10 +116,9 @@ async function login() {
             }),
         });
 
-        const responseData = await response.json();
-        console.log(responseData)
-
-        if (responseData.statusCode === 200) {
+        if (response.status === 200) {
+            const responseData = await response.json();
+            // console.log(responseData)
             // Login successful, store broker ID
             brokerId = responseData.data;
 
@@ -118,9 +128,11 @@ async function login() {
 
             // Fetch latest stock prices (assuming this function is defined in your app)
             // fetchLatestStockPrices();
-        } else {
+        } else if(response.status === 403) {
             // Handle login failure
-            alert(`Login failed. ${responseData.error}`);
+            alert(`Login failed. Authentication failed`);
+        } else {
+            alert('Login failed. An unexpected error occurred.');
         }
     } catch (error) {
         console.error('Error during login:', error);
@@ -137,12 +149,15 @@ async function placeOrder() {
     const quantity = document.getElementById('quantity').value;
 
     // Perform error handling (add your own validation logic)
-    if (!teamId || !quantity || isNaN(quantity) || quantity <= 0) {
-        alert('Please enter valid values for Team ID and Quantity.');
+    if (!teamId || !quantity || isNaN(quantity) || quantity <= 0 || !stockSelection.value) {
+        alert('Please enter valid values for Team ID, Quantity and Stocks');
         return;
     }
 
     const stockid = stockSelection.value;
+    // let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid})
+    // document.getElementById('price').value = ((stockDetails.valuation/stockDetails.availableStocks) * quantity).toFixed(2)
+    // console.log(stockSelection)
    // const price = calculatePrice(quantity, stockSymbol);
 
     try {
@@ -162,36 +177,32 @@ async function placeOrder() {
                 type: orderType,
             }),
         });
+        
 
-        const responseData = await response.json();
-        console.log(responseData)
-
-        if (responseData.statusCode === 200) {
+        if (response.status === 200) {
             // Order placed successfully
             alert(`Order placed!\nTeam ID: ${teamId}\nStock: ${stockid}\nQuantity: ${quantity}\n`);
+            clearForm()
         } else {
             // Handle specific error cases
-            if (responseData.statusCode === 410) {
-                alert(`Failed to place order. Error: ${responseData.message}`);
-            } else if (responseData.statusCode === 411) {
-                alert('Failed to place order. Insufficient quantity of stocks available  to sell ');
+            if (response.status === 410) {
+                alert(`Failed to place order. Error: Insufficient team balance`);
+            } else if (response.status === 411) {
+                alert('Failed to place order. Insufficient quantity of stocks available to teams to sell ');
             } 
-            else if (responseData.statusCode === 409) {
-                alert('Failed to place order. Insufficient quantity of stocks available to buy');
+            else if (response.status === 409) {
+                alert('Failed to place order. Insufficient quantity of stocks available in market to buy');
             }
             else {
                 // Handle other generic errors
-                alert(`Failed to place order. Error: ${responseData.message}`);
+                alert(`Failed to place order. Error: ${response.error}`);
             }
         }
     } catch (error) {
-        console.error('Error placing order:', error);
+        console.error('Error placing order:', error.message);
         alert('Failed to place order. An unexpected error occurred.');
     }
 }
-
-
-
 
 
 // Function to clear the form
@@ -200,11 +211,32 @@ function clearForm() {
     document.getElementById('stockSelection').value = '';
     document.getElementById('quantity').value = '';
     document.getElementById('price').value = '';
+    document.getElementById('teamName').textContent = "N/A";
+    document.getElementById('availableBalance').textContent = 0.00;
+    document.getElementById('availableStocks').value ='';
+    populateStockOptions()
 }
+
+function updateAvailableStock() {
+    // populateStockOptions()
+    const stockid = document.getElementById('stockSelection').value;
+    let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid});
+    document.getElementById('availableStocks').value = stockDetails.availableStocks;
+}
+
+function updateOrderValue() {
+    const stockid = stockSelection.value;
+    const quantity = document.getElementById('quantity').value;
+    let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid})
+    document.getElementById('price').value = ((stockDetails.valuation/stockDetails.availableStocks) * quantity).toFixed(2)
+}
+
 document.getElementById('loginBtn').addEventListener('click', login);
 // Event listener for the Place Order button
 document.getElementById('placeOrder').addEventListener('click', placeOrder);
 
+document.getElementById('stockSelection').addEventListener('change', updateAvailableStock);
+document.getElementById('quantity').addEventListener('input', updateOrderValue)
 // Event listener for the Clear Form button
 //document.getElementById('calculate').addEventListener('click', calculateTotalTradeAmount);
 

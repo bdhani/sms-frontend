@@ -23,10 +23,12 @@ async function login() {
             }),
         });
 
-        const responseData = await response.json();
-        console.log(responseData)
+        // console.log(responseData)
 
-        if (responseData.statusCode === 200) {
+        if (response.status === 200) {
+       
+            const responseData = await response.json();
+
             // Login successful, store team ID
             teamId = responseData.data;
 
@@ -37,9 +39,11 @@ async function login() {
 
             // Fetch latest stock prices (assuming this function is defined in your app)
             // fetchLatestStockPrices();
+        } else if(response.status === 403) {
+            alert("Login failed. Authentication failed")
         } else {
             // Handle login failure
-            alert(`Login failed. ${responseData.error}`);
+            alert(`Login failed. An unexpected error occured`);
         }
     } catch (error) {
         console.error('Error during login:', error);
@@ -59,10 +63,8 @@ function holdings()
             "sellingPrice" : (stockDet.valuation/stockDet.availableStocks).toFixed(2),
             "companyName" : stockDet.companyName
         })
-
-        portfolio.forEach(holdings => {
-            portWorth += holdings.sellingPrice * holdings.numberOfStocks
-        })
+            portWorth += (stockDet.valuation/stockDet.availableStocks).toFixed(2) *  element.numberOfStocks
+            // console.log(holdings.numberOfStocks)
     });
 
     // console.log(portfolio)
@@ -92,10 +94,15 @@ async function updateTeamDetails() {
         stockNameElement.textContent = holding.companyName;
         holdingCard.appendChild(stockNameElement);
 
-        const holdingDetailsElement = document.createElement('p');
-        holdingDetailsElement.className = 'text-gray-600 p-4';
-        holdingDetailsElement.textContent = `Quantity: ${holding.numberOfStocks} \n Current Stock Price: ${holding.sellingPrice}`;
-        holdingCard.appendChild(holdingDetailsElement);
+        const holdingDetailsElementQuantity = document.createElement('p');
+        holdingDetailsElementQuantity.className = 'text-gray-600 p-4';
+        holdingDetailsElementQuantity.textContent = `Quantity: ${holding.numberOfStocks}`;
+        holdingCard.appendChild(holdingDetailsElementQuantity);
+
+        const holdingDetailsElementPrice = document.createElement('p');
+        holdingDetailsElementPrice.className = 'text-gray-600 p-4';
+        holdingDetailsElementPrice.textContent = `Current Stock Price: ${holding.sellingPrice}`;
+        holdingCard.appendChild(holdingDetailsElementPrice);
 
         holdingsSection.appendChild(holdingCard);
     });
