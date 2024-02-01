@@ -241,24 +241,15 @@ async function placeOrder() {
 // Function to clear the form
 function clearForm() {
     document.getElementById('teamId').value = '';
-<<<<<<< HEAD
     if(isAll) {
         document.getElementById('stockSelection').innerHTML = '';
     }
-=======
-    document.getElementById('stockSelection').innerHTML = '';
->>>>>>> 009a5603ff847e1b788ac04a732234a4aca9b579
     document.getElementById('quantity').value = '';
     document.getElementById('price').value = '';
     document.getElementById('teamName').textContent = "N/A";
     document.getElementById('availableBalance').textContent = 0.00;
-<<<<<<< HEAD
     // document.getElementById('availableStocks').value ='';
     populateStockOptions()
-=======
-    document.getElementById('availableStocks').value ='';
-    populateStockOptions();
->>>>>>> 009a5603ff847e1b788ac04a732234a4aca9b579
 }
 
 // function updateAvailableStock() {
