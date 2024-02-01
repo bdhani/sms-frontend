@@ -81,8 +81,8 @@ async function createChart() {
                             stepmode: 'backward',
                         },
                         {
-                            count: 30,
-                            label: '30 mins',
+                            count: 1,
+                            label: '1 min',
                             step: 'minute',
                             stepmode: 'backward',
                         },
@@ -178,7 +178,7 @@ async function updateData() {
     }
 }
 // Update the chart 
-setInterval(updateChart, 1000);
+setInterval(updateChart, 3000);
 
 // document.getElementById('refreshChart').addEventListener('click', function () {
    
