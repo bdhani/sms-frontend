@@ -1,20 +1,45 @@
 let stockOptions = [];
 let stockPrice = 0;
+
+let stockId = '';
+let isAll = false;
+
 async function populateStockOptions() {
-    try {
-        
-        const stockDetails = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/getAllStocks`;
-        const response = await fetch(stockDetails);
-        const data = await response.json();
-        stockOptions = []
-        stockOptions = data.data;
-        // console.log(stockOptions)
-        } catch (error) {
-        console.error(`Error fetching stock details`, error);
-        
+
+    if(isAll) {
+        try {
+            const stockDetails = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/getAllStocks`;
+            const response = await fetch(stockDetails);
+            const data = await response.json();
+            stockOptions = []
+            stockOptions = data.data;
+            // console.log(stockOptions)
+            } catch (error) {
+            console.error(`Error fetching stock details`, error);
+            
+        }
+    } else {
+        try {
+            const stockDetails = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=${stockId}`;
+            const response = await fetch(stockDetails);
+            const data = await response.json();
+            stockOptions = []
+            stockOptions.push(data.data);
+            // console.log(stockOptions)
+            } catch (error) {
+            console.error(`Error fetching stock details`, error);
+            
+        }
+
+    }
+    
+    const stockSelection = document.getElementById('stockSelection');
+    let child = stockSelection.lastElementChild
+    while(child) {
+        stockSelection.removeChild(child)
+        child = stockSelection.lastElementChild
     }
 
-    const stockSelection = document.getElementById('stockSelection');
     
     stockOptions.forEach(stock => {
         const option = document.createElement('option');
@@ -47,8 +72,12 @@ async function fetchTeamDetails(teamId) {
 
 // Function to update team details and available balance
 async function updateTeamDetailsAndBalance() {
-    const stockSelection = document.getElementById('stockSelection');
-    stockSelection.value = ''
+
+    if(isAll) {
+        const stockSelection = document.getElementById('stockSelection');
+        stockSelection.value = ''
+    }
+    
     
     const teamId = document.getElementById('teamId').value;
     // console.log(typeof teamId)
@@ -120,7 +149,9 @@ async function login() {
             const responseData = await response.json();
             // console.log(responseData)
             // Login successful, store broker ID
-            brokerId = responseData.data;
+            brokerId = responseData.data.brokerId;
+            isAll = responseData.data.isAll;
+            stockId = responseData.data.stockId;
 
             // Hide the login section and show the broker interface section
             document.getElementById('brokerLoginForm').classList.add('hidden');
@@ -128,6 +159,8 @@ async function login() {
 
             // Fetch latest stock prices (assuming this function is defined in your app)
             // fetchLatestStockPrices();
+            populateStockOptions();
+
         } else if(response.status === 403) {
             // Handle login failure
             alert(`Login failed. Authentication failed`);
@@ -208,23 +241,26 @@ async function placeOrder() {
 // Function to clear the form
 function clearForm() {
     document.getElementById('teamId').value = '';
-    document.getElementById('stockSelection').value = '';
+    if(isAll) {
+        document.getElementById('stockSelection').innerHTML = '';
+    }
     document.getElementById('quantity').value = '';
     document.getElementById('price').value = '';
     document.getElementById('teamName').textContent = "N/A";
     document.getElementById('availableBalance').textContent = 0.00;
-    document.getElementById('availableStocks').value ='';
+    // document.getElementById('availableStocks').value ='';
     populateStockOptions()
 }
 
-function updateAvailableStock() {
-    // populateStockOptions()
-    const stockid = document.getElementById('stockSelection').value;
-    let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid});
-    document.getElementById('availableStocks').value = stockDetails.availableStocks;
-}
+// function updateAvailableStock() {
+//     populateStockOptions()
+//     const stockid = document.getElementById('stockSelection').value;
+//     let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid});
+//     document.getElementById('availableStocks').value = stockDetails.availableStocks;
+// }
 
 function updateOrderValue() {
+    populateStockOptions()
     const stockid = stockSelection.value;
     const quantity = document.getElementById('quantity').value;
     let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid})
@@ -235,7 +271,7 @@ document.getElementById('loginBtn').addEventListener('click', login);
 // Event listener for the Place Order button
 document.getElementById('placeOrder').addEventListener('click', placeOrder);
 
-document.getElementById('stockSelection').addEventListener('change', updateAvailableStock);
+// document.getElementById('stockSelection').addEventListener('change', updateAvailableStock);
 document.getElementById('quantity').addEventListener('input', updateOrderValue)
 // Event listener for the Clear Form button
 //document.getElementById('calculate').addEventListener('click', calculateTotalTradeAmount);
@@ -248,4 +284,3 @@ document.getElementById("getDetails").addEventListener('click', updateTeamDetail
 //  fetchLatestStockPrices();
 
 // Populate stock options on page load
-populateStockOptions();
