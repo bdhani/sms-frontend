@@ -178,7 +178,7 @@ async function updateData() {
     }
 }
 // Update the chart 
-setInterval(updateChart, 15000);
+setInterval(updateChart, 3000);
 
 // document.getElementById('refreshChart').addEventListener('click', function () {
    

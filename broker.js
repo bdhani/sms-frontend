@@ -208,13 +208,13 @@ async function placeOrder() {
 // Function to clear the form
 function clearForm() {
     document.getElementById('teamId').value = '';
-    document.getElementById('stockSelection').value = '';
+    document.getElementById('stockSelection').innerHTML = '';
     document.getElementById('quantity').value = '';
     document.getElementById('price').value = '';
     document.getElementById('teamName').textContent = "N/A";
     document.getElementById('availableBalance').textContent = 0.00;
     document.getElementById('availableStocks').value ='';
-    populateStockOptions()
+    populateStockOptions();
 }
 
 function updateAvailableStock() {
