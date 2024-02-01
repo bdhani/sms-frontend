@@ -1,11 +1,11 @@
-const newsApiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/news';
+const newsApiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/news/getNewsbyFilter?stocks=65b956bda5fc62b5de7d59e7&sentiment=all';
 
 // Function to fetch news data from the API
 async function fetchNews() {
     try {
         const response = await fetch(newsApiUrl);
         const data = await response.json();
-        return data;
+        return data.data;
     } catch (error) {
         console.error('Error fetching news:', error);
         return null;
@@ -30,7 +30,8 @@ async function updateNews() {
 
             const timeElement = document.createElement('div');
             timeElement.className = 'text-gray-500 mb-2';
-            timeElement.textContent = news.time;
+            const time = new Date(news.createdAt);
+            timeElement.textContent = time.toLocaleDateString() + "  "+ time.toLocaleTimeString()
             newsCard.appendChild(timeElement);
 
             const titleElement = document.createElement('h3');
@@ -40,7 +41,7 @@ async function updateNews() {
 
             const textElement = document.createElement('p');
             textElement.className = 'text-gray-600';
-            textElement.textContent = news.text;
+            textElement.textContent = news.newsText;
             newsCard.appendChild(textElement);
 
             newsSection.appendChild(newsCard);
