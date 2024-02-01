@@ -2,6 +2,7 @@
 let teamDetails = {};
 let teamId = null;
 let portWorth = 0;
+let totWorth = 0;
 let portfolio = [];
 
 // Function to handle broker login
@@ -81,6 +82,7 @@ async function updateTeamDetails() {
     
     holdings();
     document.getElementById('portfolioWorth').textContent = portWorth.toFixed(2);
+    document.getElementById('totWorth').textContent = Number(portWorth.toFixed(2))+Number(teamDetails.currentBalance.toFixed(2));
     
     const holdingsSection = document.getElementById('holdingsSection');
     holdingsSection.innerHTML = '';
