@@ -82,7 +82,7 @@ async function updateTeamDetails() {
     
     holdings();
     document.getElementById('portfolioWorth').textContent = portWorth.toFixed(2);
-    document.getElementById('totWorth').textContent = Number(portWorth.toFixed(2))+Number(teamDetails.currentBalance.toFixed(2));
+    document.getElementById('totWorth').textContent = Math.round(Number(portWorth.toFixed(2))+Number(teamDetails.currentBalance.toFixed(2)));
     
     const holdingsSection = document.getElementById('holdingsSection');
     holdingsSection.innerHTML = '';
