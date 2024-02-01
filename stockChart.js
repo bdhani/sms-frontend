@@ -1,4 +1,4 @@
-const apiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=65b956bda5fc62b5de7d59e7';
+const apiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=65bbcc001f2a6354170c00e8';
 let chartData =[];
 let chartUpdate = {};
 let layout = {};
