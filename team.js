@@ -1,9 +1,10 @@
 // Global variables to store team details and transaction history
 let teamDetails = {};
 let teamId = null;
-let portWorth = 0;
-let totWorth = 0;
 let portfolio = [];
+let worthDetails = {};
+// let portWorth = 0;
+// let totWorth = 0;
 
 // Function to handle broker login
 async function login() {
@@ -55,7 +56,6 @@ async function login() {
 function holdings()
 {
     portfolio = [];
-    portWorth = 0;
     teamDetails.portfolio.forEach(element => {
         let stockDet = teamDetails.stockDetails.find((ele)=> {return ele._id===element.stocks})
         if(stockDet.isLaunched) {
@@ -65,27 +65,28 @@ function holdings()
                 "sellingPrice" : (stockDet.valuation/stockDet.availableStocks).toFixed(2),
                 "companyName" : stockDet.companyName
             })
-                portWorth += (stockDet.valuation/stockDet.availableStocks).toFixed(2) *  element.numberOfStocks
         }
         
             // console.log(holdings.numberOfStocks)
     });
 
-    // console.log(portfolio)
-    // console.log(portWorth)
+//     // console.log(portfolio)
+//     // console.log(portWorth)
 
 }
 
 // Function to update team details and transaction history
 async function updateTeamDetails() {
     teamDetails = await fetchTeamDetails(teamId);
+    worthDetails = await fetchPortfolioWorthDetails(teamId);
+    
     document.getElementById('teamId').textContent = teamDetails.teamId || 'N/A';
     document.getElementById('teamName').textContent = teamDetails.teamName || 'N/A';
     document.getElementById('currentCashBalance').textContent = teamDetails.currentBalance.toFixed(2);
     
     holdings();
-    document.getElementById('portfolioWorth').textContent = portWorth.toFixed(2);
-    document.getElementById('totWorth').textContent = Math.round(Number(portWorth.toFixed(2))+Number(teamDetails.currentBalance.toFixed(2)));
+    document.getElementById('portfolioWorth').textContent = worthDetails.portfolioWorth.toFixed(2);
+    document.getElementById('totWorth').textContent = worthDetails.totalWorth.toFixed(2);
     
     const holdingsSection = document.getElementById('holdingsSection');
     holdingsSection.innerHTML = '';
@@ -122,6 +123,19 @@ async function fetchTeamDetails(teamId) {
         return data.data;
     } catch (error) {
         console.error(`Error fetching team details for Team ID ${teamId}:`, error);
+        return {};
+    }
+}
+
+async function fetchPortfolioWorthDetails(teamId) {
+    try {
+        
+        const worthDetailsEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/getWorth?id=${teamId}`;
+        const response = await fetch(worthDetailsEndpoint);
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error(`Error fetching worth details for Team ID ${teamId}:`, error);
         return {};
     }
 }
