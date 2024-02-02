@@ -260,7 +260,7 @@ function clearForm() {
 // }
 
 function updateOrderValue() {
-    populateStockOptions()
+    // populateStockOptions()
     const stockid = stockSelection.value;
     const quantity = document.getElementById('quantity').value;
     let stockDetails = stockOptions.find((stocks) => {return stocks._id === stockid})
