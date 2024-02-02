@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const newMemberFields = document.createElement('div');
         newMemberFields.className = 'space-x-4 mt-2';
         newMemberFields.innerHTML = `
-            <input type="text" name="memberName" placeholder="Name" class="mb-4 p-2 border border-gray-300 rounded-md">
+            <input type="text" name="memberName" placeholder="Name" class="mb-4 p-2 border border-gray-300 rounded-md" required>
             <input type="email" name="memberEmail" placeholder="Email" class="mb-4 p-2 border border-gray-300 rounded-md">
             <input type="tel" name="memberPhoneNumber" placeholder="Phone Number" class= "mb-4 p-2 border border-gray-300 rounded-md">
-            <input type="text" name="memberRollNo" placeholder="Roll Number" class="mb-4 border border-gray-300 rounded-md">
+            <input type="text" name="memberRollNo" placeholder="Roll Number" class="mb-4 border border-gray-300 rounded-md"required>
         `;
         teamMembersContainer.appendChild(newMemberFields);
         } else {
@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const teamData = collectFormData();
             const response = await registerTeam(teamData);
-            if (response && response.teamId) {
-                alert(`Team registration successful! Team ID: ${response.teamId}`);
+            if (response.statusCode===200) {
+                alert(`Team registration successful! Team ID: ${response.data.teamId}`);
                 clearForm();
             } else {
                 alert('Team registration failed. Please try again.');
@@ -59,10 +59,10 @@ function collectFormData() {
     });
 
     return {
-        teamName,
+        "teamName" : teamName,
         teamDetails: teamMembers,
-        username,
-        password,
+        "username" : username,
+        "password": password,
     };
 }
 
@@ -77,12 +77,10 @@ async function registerTeam(teamData) {
             },
             body: JSON.stringify(teamData),
         });
+        console.log(JSON.stringify(teamData));
+     
 
-        if (!response.ok) {
-            throw new Error(`Failed to register team. Server responded with status ${response.status}`);
-        }
-
-        return await response.json().data;
+        return await response.json();
     } catch (error) {
         console.error('Error during team registration:', error);
         return null;
@@ -102,10 +100,10 @@ function clearForm() {
     const initialMemberFields = document.createElement('div');
     initialMemberFields.className = 'space-x-4 mt-2';
     initialMemberFields.innerHTML = `
-        <input type="text" name="memberName" placeholder="Name" class=" border border-gray-300 rounded-md">
+        <input type="text" name="memberName" placeholder="Name" class=" border border-gray-300 rounded-md" required>
         <input type="email" name="memberEmail" placeholder="Email" class="p-2 border border-gray-300 rounded-md">
         <input type="tel" name="memberPhoneNumber" placeholder="Phone Number" class=" p-2 border border-gray-300 rounded-md">
-        <input type="text" name="memberRollNo" placeholder="Roll Number" class=" p-2 border border-gray-300 rounded-md">
+        <input type="text" name="memberRollNo" placeholder="Roll Number" class=" p-2 border border-gray-300 rounded-md" required>
     `;
     teamMembersContainer.appendChild(initialMemberFields);
 }
