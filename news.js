@@ -2,6 +2,7 @@ let newsApiUrl = '';
 
 // Function to fetch news data from the API
 async function fetchNews() {
+    const stockId = getURLParameter('id');
     newsApiUrl = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
     try {
         const response = await fetch(newsApiUrl);
@@ -16,22 +17,21 @@ async function fetchNews() {
 // Function to update the news section
 async function updateNews() {
     const newsSection = document.getElementById('newsSection');
-    const refreshButton = document.getElementById('refreshNews');
     
     const newsData = await fetchNews();
-
-    if (newsData) {
+    const avlNews = newsData.filter(news => news.isDisplayed);
+    if (avlNews) {
         // Clear existing news cards
         newsSection.innerHTML = '';
 
         // Update news cards
-        newsData.forEach(news => {
+        avlNews.forEach(news => {
             const newsCard = document.createElement('div');
-            newsCard.className = 'bg-white p-4 rounded-md shadow-md';
+            newsCard.className = 'bg-white p-4 rounded-md shadow-md mb-4';
 
             const timeElement = document.createElement('div');
             timeElement.className = 'text-gray-500 mb-2';
-            const time = new Date(news.createdAt);
+            const time = new Date(news.updatedAt);
             timeElement.textContent = time.toLocaleDateString() + "  "+ time.toLocaleTimeString()
             newsCard.appendChild(timeElement);
 
@@ -56,17 +56,13 @@ async function updateNews() {
     }
 
     // Enable the refresh button after updating news
-    refreshButton.disabled = false;
+    
 }
 
 // Event listener for the refresh button
-// document.getElementById('refreshNews').addEventListener('click', function () {
-//     // Disable the refresh button during the update
-//     this.disabled = true;
-
-//     // Update the news section
-//     updateNews();
-// });
+document.getElementById('refreshNews').addEventListener('click', function () {
+    updateNews();
+});
 
 // Initial news update
 updateNews();
