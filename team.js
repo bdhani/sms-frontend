@@ -58,13 +58,16 @@ function holdings()
     portWorth = 0;
     teamDetails.portfolio.forEach(element => {
         let stockDet = teamDetails.stockDetails.find((ele)=> {return ele._id===element.stocks})
-        portfolio.push({
-            "_id" : element.stocks,
-            "numberOfStocks" : element.numberOfStocks,
-            "sellingPrice" : (stockDet.valuation/stockDet.availableStocks).toFixed(2),
-            "companyName" : stockDet.companyName
-        })
-            portWorth += (stockDet.valuation/stockDet.availableStocks).toFixed(2) *  element.numberOfStocks
+        if(stockDet.isLaunched) {
+            portfolio.push({
+                "_id" : element.stocks,
+                "numberOfStocks" : element.numberOfStocks,
+                "sellingPrice" : (stockDet.valuation/stockDet.availableStocks).toFixed(2),
+                "companyName" : stockDet.companyName
+            })
+                portWorth += (stockDet.valuation/stockDet.availableStocks).toFixed(2) *  element.numberOfStocks
+        }
+        
             // console.log(holdings.numberOfStocks)
     });
 
