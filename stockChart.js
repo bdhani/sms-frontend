@@ -33,7 +33,7 @@ async function updateChart() {
         },[0]); 
         document.getElementById('companyName').innerText = newData.data.companyName;
         document.getElementById('price').innerText = newData.data.sellingPrice.toFixed(2);
-        document.getElementById('valuation').innerText = newData.data.valuation.toFixed(2);
+        
     }
 }
 
@@ -47,7 +47,7 @@ async function createChart() {
         
         document.getElementById('companyName').innerText = data.data.companyName;
         document.getElementById('price').innerText = data.data.sellingPrice.toFixed(2);
-        document.getElementById('valuation').innerText = data.data.valuation.toFixed(2);
+        
          chartData = [{
             x: data.data.logs.map( key => new Date(key.createdAt) ),
             y: data.data.logs.map( key => key.price ),
