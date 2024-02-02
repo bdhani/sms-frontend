@@ -21,7 +21,7 @@ async function fetchData() {
 async function updateChart() {
     const newData = await fetchData();
     let len = newData.data.logs.length;
-    let tim = newData.data.logs[len-1].createdAt;
+    let tim = new Date(newData.data.logs[len-1].createdAt);
     let price = newData.data.logs[len-1].price;
 
     if (newData) {
@@ -49,7 +49,7 @@ async function createChart() {
         document.getElementById('price').innerText = data.data.sellingPrice.toFixed(2);
         document.getElementById('valuation').innerText = data.data.valuation.toFixed(2);
          chartData = [{
-            x: data.data.logs.map( key => key.createdAt ),
+            x: data.data.logs.map( key => new Date(key.createdAt) ),
             y: data.data.logs.map( key => key.price ),
             type: 'scatter',
             mode: 'lines+markers',

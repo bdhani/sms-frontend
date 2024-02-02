@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const addMemberButton = document.getElementById('addMemberButton');
     const teamMembersContainer = document.getElementById('teamMembersContainer');
-
+    const maxTeamMembers = 3;
     addMemberButton.addEventListener('click', function () {
+        const currentMemberCount = teamMembersContainer.querySelectorAll('div').length;
+        if (currentMemberCount < maxTeamMembers) {
         const newMemberFields = document.createElement('div');
         newMemberFields.className = 'space-x-4 mt-2';
         newMemberFields.innerHTML = `
@@ -12,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <input type="text" name="memberRollNo" placeholder="Roll Number" class="mb-4 border border-gray-300 rounded-md">
         `;
         teamMembersContainer.appendChild(newMemberFields);
+        } else {
+            alert(`Maximum team members limit reached (${maxTeamMembers}).`);
+        }
     });
 
     // Submit button functionality
