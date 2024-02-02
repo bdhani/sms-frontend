@@ -2,9 +2,16 @@ let apiUrl = '';
 let chartData =[];
 let chartUpdate = {};
 let layout = {};
-async function fetchData() {
+async function fetchData(allLogs) {
     try {
-        const response = await fetch(apiUrl);
+
+        let response = null 
+
+        if(allLogs) {
+            response = await fetch(apiUrl+"&logType=all");
+        } else {
+            response = await fetch(apiUrl);
+        }
 
         const data = await response.json();
         console.log(data);
@@ -19,7 +26,7 @@ async function fetchData() {
 
 
 async function updateChart() {
-    const newData = await fetchData();
+    const newData = await fetchData(false);
     let len = newData.data.logs.length;
     let tim = new Date(newData.data.logs[len-1].createdAt);
     let price = newData.data.logs[len-1].price;
@@ -40,7 +47,7 @@ async function updateChart() {
 async function createChart() {
     const stockId = getURLParameter('id');
     apiUrl = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=${stockId}`;
-    const data = await fetchData();
+    const data = await fetchData(true);
 
     if (data) {
 
