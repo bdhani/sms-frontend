@@ -1,4 +1,4 @@
-const apiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=65bbcc001f2a6354170c00e8';
+let apiUrl = '';
 let chartData =[];
 let chartUpdate = {};
 let layout = {};
@@ -16,21 +16,7 @@ async function fetchData() {
 }
 
 
-// async function updateChart() {
 
-//     const data = await fetchData();
-
-//     chartData = [{
-//         x: data.data.logs.map( key => key.createdAt ),
-//         y: data.data.logs.map( key => key.price ),
-//         type: 'line',
-//         mode: 'lines+markers',
-//         marker: {color: 'blue'},
-//     }];
-//     console.log(chartData)
-//      Plotly.update('stockPriceChart', chartData, layout);
-
-// }
 
 async function updateChart() {
     const newData = await fetchData();
@@ -52,6 +38,8 @@ async function updateChart() {
 }
 
 async function createChart() {
+    const stockId = getURLParameter('id');
+    apiUrl = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/get?id=${stockId}`;
     const data = await fetchData();
 
     if (data) {
@@ -114,68 +102,10 @@ async function createChart() {
         Plotly.newPlot('stockPriceChart', chartData, layout);
     }
 }
-async function updateData() {
 
-    const data = await fetchData();
-
-    if (data) {
-
-        
-        document.getElementById('companyName').innerText = data.data.companyName;
-        document.getElementById('price').innerText = data.data.sellingPrice.toFixed(2);
-        document.getElementById('valuation').innerText = data.data.valuation.toFixed(2);
-         updateData = {
-            x: data.data.logs.map( key => key.createdAt ),
-            y: data.data.logs.map( key => key.price ),
-            type: 'line',
-            mode: 'lines+markers',
-            marker: {color: 'blue'},
-        };
-
-         layout = {
-            title: 'Stock Price vs Time',
-            xaxis: {
-                title: 'Time',
-                rangeselector: {
-                    buttons: [
-                        {
-                            count: 1,
-                            label: '1 sec',
-                            step: 'second',
-                            stepmode: 'backward',
-                        },
-                        {
-                            count: 30,
-                            label: '30 mins',
-                            step: 'minute',
-                            stepmode: 'backward',
-                        },
-                        {
-                            count: 1,
-                            label: '1 hr',
-                            step: 'hour',
-                            stepmode: 'backward',
-                        },
-                        {
-                            count: 1,
-                            label: '1 day',
-                            step: 'day',
-                            stepmode: 'backward',
-                        },
-                        {
-                            label: 'All',
-                            step: 'all',
-                        },
-                    ],
-                },
-                type: 'date',
-            },
-            yaxis: {
-                title: 'Stock Price',
-            },
-        };
-
-    }
+function getURLParameter(parameterName) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(parameterName);
 }
 // Update the chart 
 setInterval(updateChart, 3000);
