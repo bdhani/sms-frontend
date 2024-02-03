@@ -38,8 +38,6 @@ async function login() {
             document.getElementById('teamLoginForm').classList.add('hidden');
             document.getElementById('teamInterface').classList.remove('hidden');
             updateTeamDetails();
-
-            // Fetch latest stock prices (assuming this function is defined in your app)
             // fetchLatestStockPrices();
         } else if(response.status === 403) {
             alert("Login failed. Authentication failed")
@@ -82,11 +80,11 @@ async function updateTeamDetails() {
     
     document.getElementById('teamId').textContent = teamDetails.teamId || 'N/A';
     document.getElementById('teamName').textContent = teamDetails.teamName || 'N/A';
-    document.getElementById('currentCashBalance').textContent = teamDetails.currentBalance.toFixed(2);
+    document.getElementById('currentCashBalance').textContent = `${teamDetails.currentBalance.toFixed(2)}`;
     
     holdings();
-    document.getElementById('portfolioWorth').textContent = worthDetails.portfolioWorth.toFixed(2);
-    document.getElementById('totWorth').textContent = worthDetails.totalWorth.toFixed(2);
+    document.getElementById('portfolioWorth').textContent = `${worthDetails.portfolioWorth.toFixed(2)}`;
+    document.getElementById('totWorth').textContent = `${worthDetails.totalWorth.toFixed(2)}`;
     
     const holdingsSection = document.getElementById('holdingsSection');
     holdingsSection.innerHTML = '';
@@ -107,8 +105,13 @@ async function updateTeamDetails() {
 
         const holdingDetailsElementPrice = document.createElement('p');
         holdingDetailsElementPrice.className = 'text-gray-600 p-4';
-        holdingDetailsElementPrice.textContent = `Current Stock Price: ${holding.sellingPrice}`;
+        holdingDetailsElementPrice.textContent = `Current Stock Price: ₹${holding.sellingPrice}`;
         holdingCard.appendChild(holdingDetailsElementPrice);
+
+        const tradeCurrentValue = document.createElement('p');
+        tradeCurrentValue.className = 'text-gray-600 p-4';
+        tradeCurrentValue.textContent = `Trade Value: ₹${Math.round(holding.sellingPrice*holding.numberOfStocks)}`;
+        holdingCard.appendChild(tradeCurrentValue);
 
         holdingsSection.appendChild(holdingCard);
     });
@@ -144,7 +147,6 @@ async function fetchPortfolioWorthDetails(teamId) {
 //updateTeamDetails();
 document.getElementById('loginBtn').addEventListener('click', login);
 document.getElementById('refresh').addEventListener('click', updateTeamDetails);
-// Update data regularly (every 5 minutes in this example, adjust as needed)
 // setInterval(() => {
     
 //     updateTeamDetails();
