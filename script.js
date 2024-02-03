@@ -53,4 +53,6 @@ async function updateStockCards() {
 
 updateStockCards();
 
-setInterval(updateStockCards, 3000);
+document.getElementById('refresh').addEventListener('click', updateStockCards);
+
+//setInterval(updateStockCards, 3000);

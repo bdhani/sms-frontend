@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const teamData = collectFormData();
             const response = await registerTeam(teamData);
+            console.log(response);
             if (response.statusCode===200) {
                 alert(`Team registration successful! Team ID: ${response.data.teamId}`);
                 clearForm();
