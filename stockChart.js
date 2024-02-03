@@ -39,7 +39,7 @@ async function updateChart() {
             y: [[price]],
         },[0]); 
         document.getElementById('companyName').innerText = newData.data.companyName;
-        document.getElementById('price').innerText = newData.data.sellingPrice.toFixed(2);
+        document.getElementById('price').innerText = `₹${newData.data.sellingPrice.toFixed(2)}`;
         
     }
 }
@@ -53,7 +53,7 @@ async function createChart() {
 
         
         document.getElementById('companyName').innerText = data.data.companyName;
-        document.getElementById('price').innerText = data.data.sellingPrice.toFixed(2);
+        document.getElementById('price').innerText = `₹${data.data.sellingPrice.toFixed(2)}`;
         
          chartData = [{
             x: data.data.logs.map( key => new Date(key.createdAt) ),
