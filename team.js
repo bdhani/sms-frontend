@@ -6,7 +6,7 @@ let worthDetails = {};
 // let portWorth = 0;
 // let totWorth = 0;
 
-// Function to handle broker login
+// Function to handle login
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
