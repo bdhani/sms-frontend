@@ -115,7 +115,7 @@ function getURLParameter(parameterName) {
     return urlParams.get(parameterName);
 }
 // Update the chart 
-setInterval(updateChart, 3000);
+setInterval(updateChart, 5000);
 
 // document.getElementById('refreshChart').addEventListener('click', function () {
    
