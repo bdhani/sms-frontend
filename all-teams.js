@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Iterate over each team and create a team card
         for (const team of teams) {
             
-            const teamWorth = await fetchTeamWorth(team._id);
+            
 
             // Create team card
             const teamCard = document.createElement('div');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <ul>
                     ${team.members.map(member => `<li>${member.name}</li>`).join('')}
                 </ul>
-                <p>Team Worth: ₹${teamWorth.toFixed(2)}</p>
+                
             `;
 
             teamsContainer.appendChild(teamCard);
