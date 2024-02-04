@@ -215,7 +215,12 @@ async function placeOrder() {
         if (response.status === 200) {
             // Order placed successfully
             alert(`Order placed!\nTeam ID: ${teamId}\nStock: ${stockid}\nQuantity: ${quantity}\n`);
-            clearForm()
+            if(brokerId!="65bc0a554783f4a26d954330")
+            {
+                clearForm();
+
+            }
+          
         } else {
             // Handle specific error cases
             if (response.status === 410) {
@@ -225,6 +230,9 @@ async function placeOrder() {
             } 
             else if (response.status === 409) {
                 alert('Failed to place order. Insufficient quantity of stocks available in market to buy');
+            }
+            else if (response.status === 420) {
+                alert(`Wait for 3 mins. Error: ${response.error}`);
             }
             else {
                 // Handle other generic errors
