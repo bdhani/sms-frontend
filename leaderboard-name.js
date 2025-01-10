@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 // Function to fetch leaderboard data
 async function fetchLeaderboard() {
     try {
-        const leaderboardEndpoint = 'http://localhost:8000/api/v1/teams/getLeaderboard';
+        const leaderboardEndpoint = 'http://165.232.183.231/api/v1/teams/getLeaderboard';
         const response = await fetch(leaderboardEndpoint);
         const data = await response.json();
         return data.data;

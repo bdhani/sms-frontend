@@ -1,7 +1,7 @@
 // Function to fetch all stocks from the API
 async function fetchAllStocks() {
     try {
-        const stocksEndpoint = 'http://localhost:8000/api/v1/stocks/getAllStocks';
+        const stocksEndpoint = 'http://165.232.183.231/api/v1/stocks/getAllStocks';
         const response = await fetch(stocksEndpoint);
         const data = await response.json();
         console.log('Fetched stocks:', data); // Debugging log

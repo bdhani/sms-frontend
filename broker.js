@@ -8,7 +8,7 @@ async function populateStockOptions() {
 
     if(isAll) {
         try {
-            const stockDetails = `http://localhost:8000/api/v1/stocks/getAllStocks`;
+            const stockDetails = `http://165.232.183.231/api/v1/stocks/getAllStocks`;
             const response = await fetch(stockDetails);
             const data = await response.json();
             stockOptions = []
@@ -20,7 +20,7 @@ async function populateStockOptions() {
         }
     } else {
         try {
-            const stockDetails = `http://localhost:8000/api/v1/stocks/get?id=${stockId}`;
+            const stockDetails = `http://165.232.183.231/api/v1/stocks/get?id=${stockId}`;
             const response = await fetch(stockDetails);
             const data = await response.json();
             stockOptions = []
@@ -54,7 +54,7 @@ async function populateStockOptions() {
 async function fetchTeamDetails(teamId) {
     try {
         
-        const teamDetailsEndpoint = `http://localhost:8000/api/v1/teams/get?id=${teamId}`;
+        const teamDetailsEndpoint = `http://165.232.183.231/api/v1/teams/get?id=${teamId}`;
         const response = await fetch(teamDetailsEndpoint);
         if(response.status === 200) {
             const data = await response.json();
@@ -132,7 +132,7 @@ async function login() {
     const password = document.getElementById('password').value;
 
     try {
-        const loginApiUrl = 'http://localhost:8000/api/v1/brokers/auth';
+        const loginApiUrl = 'http://165.232.183.231/api/v1/brokers/auth';
 
         const response = await fetch(loginApiUrl, {
             method: 'POST',
@@ -195,7 +195,7 @@ async function placeOrder() {
 
     try {
     
-        const orderApiUrl = 'http://localhost:8000/api/v1/transactions/add';
+        const orderApiUrl = 'http://165.232.183.231/api/v1/transactions/add';
 
         const response = await fetch(orderApiUrl, {
             method: 'POST',

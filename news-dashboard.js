@@ -35,7 +35,7 @@
 // Function to fetch details of all stocks
 async function fetchAllStocks() {
     try {
-        const stocksEndpoint = 'http://localhost:8000/api/v1/stocks/getAllStocks';
+        const stocksEndpoint = 'http://165.232.183.231/api/v1/stocks/getAllStocks';
         const response = await fetch(stocksEndpoint);
         const data = await response.json();
         return data.data;
@@ -48,7 +48,7 @@ async function fetchAllStocks() {
 // Function to fetch news for a specific stock
 async function fetchStockNews(stockId) {
     try {
-        const newsEndpoint = `http://localhost:8000/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
+        const newsEndpoint = `http://165.232.183.231/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
         const response = await fetch(newsEndpoint);
         const data = await response.json();
         return data.data;
@@ -137,7 +137,7 @@ function displayNewsCards(newsData, container) {
             republishButton.textContent = 'Republish';
             republishButton.addEventListener('click', async function () {
                 try {
-                    const republishEndpoint = `http://localhost:8000/api/v1/news/republish?id=${newsItem._id}`;
+                    const republishEndpoint = `http://165.232.183.231/api/v1/news/republish?id=${newsItem._id}`;
                     const republishResponse = await fetch(republishEndpoint, { method: 'POST' });
                     
                     if (republishResponse.status === 200) {
@@ -160,7 +160,7 @@ function displayNewsCards(newsData, container) {
             publishButton.textContent = 'Publish';
             publishButton.addEventListener('click', async function () {
                 try {
-                    const publishEndpoint = `http://localhost:8000/api/v1/news/publish?id=${newsItem._id}`;
+                    const publishEndpoint = `http://165.232.183.231/api/v1/news/publish?id=${newsItem._id}`;
                     const publishResponse = await fetch(publishEndpoint, { method: 'POST' });
 
                     if (publishResponse.status === 200) {

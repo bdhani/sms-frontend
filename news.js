@@ -3,7 +3,7 @@ let newsApiUrl = '';
 // Function to fetch news data from the API
 async function fetchNews() {
     const stockId = getURLParameter('id');
-    newsApiUrl = `http://localhost:8000/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
+    newsApiUrl = `http://165.232.183.231/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
     try {
         const response = await fetch(newsApiUrl);
         const data = await response.json();

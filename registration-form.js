@@ -70,7 +70,7 @@ function collectFormData() {
 // Function to send a POST request to register a team
 async function registerTeam(teamData) {
     try {
-        const registrationEndpoint = 'http://localhost:8000/api/v1/teams/add';
+        const registrationEndpoint = 'http://165.232.183.231/api/v1/teams/add';
         const response = await fetch(registrationEndpoint, {
             method: 'POST',
             headers: {

@@ -99,7 +99,7 @@ async function createChart() {
         return;
     }
 
-    apiUrl = `http://localhost:8000/api/v1/stocks/get?id=${stockId}`;
+    apiUrl = `http://165.232.183.231/api/v1/stocks/get?id=${stockId}`;
     const data = await fetchData(true);
 
     if (data && data.data) {

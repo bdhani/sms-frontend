@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 // Function to fetch all teams
 async function fetchAllTeams() {
     try {
-        const teamsEndpoint = 'http://localhost:8000/api/v1/teams/getAllTeams';
+        const teamsEndpoint = 'http://165.232.183.231/api/v1/teams/getAllTeams';
         const response = await fetch(teamsEndpoint);
         const data = await response.json();
         return data.data;
@@ -49,7 +49,7 @@ async function fetchAllTeams() {
 // Function to fetch team worth by team ID
 async function fetchTeamWorth(teamId) {
     try {
-        const teamWorthEndpoint = `http://localhost:8000/api/v1/teams/getWorth?id=${teamId}`;
+        const teamWorthEndpoint = `http://165.232.183.231/api/v1/teams/getWorth?id=${teamId}`;
         const response = await fetch(teamWorthEndpoint);
         const data = await response.json();
         return data.data.totalWorth;
