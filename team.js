@@ -12,7 +12,7 @@ async function login() {
     const password = document.getElementById('password').value;
 
     try {
-        const loginApiUrl = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/auth';
+        const loginApiUrl = 'http://localhost:8000/api/v1/teams/auth';
 
         const response = await fetch(loginApiUrl, {
             method: 'POST',
@@ -120,7 +120,7 @@ async function updateTeamDetails() {
 async function fetchTeamDetails(teamId) {
     try {
         
-        const teamDetailsEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/getPortfolioDetails?id=${teamId}`;
+        const teamDetailsEndpoint = `http://localhost:8000/api/v1/teams/getPortfolioDetails?id=${teamId}`;
         const response = await fetch(teamDetailsEndpoint);
         const data = await response.json();
         return data.data;
@@ -133,7 +133,7 @@ async function fetchTeamDetails(teamId) {
 async function fetchPortfolioWorthDetails(teamId) {
     try {
         
-        const worthDetailsEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/getWorth?id=${teamId}`;
+        const worthDetailsEndpoint = `http://localhost:8000/api/v1/teams/getWorth?id=${teamId}`;
         const response = await fetch(worthDetailsEndpoint);
         const data = await response.json();
         return data.data;

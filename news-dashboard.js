@@ -35,7 +35,7 @@
 // Function to fetch details of all stocks
 async function fetchAllStocks() {
     try {
-        const stocksEndpoint = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/stocks/getAllStocks';
+        const stocksEndpoint = 'http://localhost:8000/api/v1/stocks/getAllStocks';
         const response = await fetch(stocksEndpoint);
         const data = await response.json();
         return data.data;
@@ -48,7 +48,7 @@ async function fetchAllStocks() {
 // Function to fetch news for a specific stock
 async function fetchStockNews(stockId) {
     try {
-        const newsEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
+        const newsEndpoint = `http://localhost:8000/api/v1/news/getNewsbyFilter?stocks=${stockId}&sentiment=all`;
         const response = await fetch(newsEndpoint);
         const data = await response.json();
         return data.data;
@@ -58,6 +58,7 @@ async function fetchStockNews(stockId) {
 }
 
 // Function to display news cards for a stock
+/*
 function displayNewsCards(newsData, container) {
     // Iterate over news and create news cards
     for (const newsItem of newsData) {
@@ -83,7 +84,7 @@ function displayNewsCards(newsData, container) {
             publishButton.textContent = 'Publish';
             publishButton.addEventListener('click', async function () {
                 try {
-                    const publishEndpoint = `https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/news/publish?id=${newsItem._id}`;
+                    const publishEndpoint = `http://localhost:8000/api/v1/news/publish?id=${newsItem._id}`;
                     const publishResponse = await fetch(publishEndpoint, { method: 'POST' });
                     console.log(publishResponse);
                     if (publishResponse.status===200) {
@@ -107,6 +108,80 @@ function displayNewsCards(newsData, container) {
         container.appendChild(newsCard);
     }
 }
+*/
+// Function to display news cards for a stock
+function displayNewsCards(newsData, container) {
+    // Iterate over news and create news cards
+    for (const newsItem of newsData) {
+        const newsCard = document.createElement('div');
+        newsCard.className = 'bg-white p-4 rounded-md shadow-md mb-4';
+
+        const newsTime = new Date(newsItem.createdAt).toLocaleString();
+        newsCard.innerHTML = `
+            <p class="text-sm text-gray-500">${newsTime}</p>
+            <p class="text-base"><em>${newsItem.sentiment}</em></p>
+            <p class="text-base">${newsItem.newsText}</p>
+        `;
+
+        // Display button or indication based on the 'isDisplayed' property
+        if (newsItem.isDisplayed) {
+            const displayedIndicator = document.createElement('p');
+            displayedIndicator.className = 'text-green-500 mt-2';
+            displayedIndicator.textContent = 'Displayed';
+            newsCard.appendChild(displayedIndicator);
+            console.log('Adding Republish button for:', newsItem._id);
+
+            // Add Republish button if the news has been displayed
+            const republishButton = document.createElement('button');
+            republishButton.className = 'mt-2 p-2 bg-yellow-500 text-white rounded-md';
+            republishButton.textContent = 'Republish';
+            republishButton.addEventListener('click', async function () {
+                try {
+                    const republishEndpoint = `http://localhost:8000/api/v1/news/republish?id=${newsItem._id}`;
+                    const republishResponse = await fetch(republishEndpoint, { method: 'POST' });
+                    
+                    if (republishResponse.status === 200) {
+                        alert(`News republished successfully!`);
+                        console.log('Adding BRepublish button for:', newsItem._id);
+                        // You can refresh the stock details or perform other actions
+                    } else {
+                        alert(`Failed to republish news. Server responded with status ${republishResponse.status}`);
+                    }
+                } catch (error) {
+                    console.error('Error republishing news:', error);
+                    alert('An error occurred while republishing news. Please try again.');
+                }
+            });
+
+            newsCard.appendChild(republishButton);
+        } else {
+            const publishButton = document.createElement('button');
+            publishButton.className = 'mt-2 p-2 bg-blue-500 text-white rounded-md';
+            publishButton.textContent = 'Publish';
+            publishButton.addEventListener('click', async function () {
+                try {
+                    const publishEndpoint = `http://localhost:8000/api/v1/news/publish?id=${newsItem._id}`;
+                    const publishResponse = await fetch(publishEndpoint, { method: 'POST' });
+
+                    if (publishResponse.status === 200) {
+                        alert(`News published successfully!`);
+                        // getStockDetails(); // Optional: Refresh stock details after publishing
+                    } else {
+                        alert(`Failed to publish news. Server responded with status ${publishResponse.status}`);
+                    }
+                } catch (error) {
+                    console.error('Error publishing news:', error);
+                    alert('An error occurred while publishing news. Please try again.');
+                }
+            });
+
+            newsCard.appendChild(publishButton);
+        }
+
+        container.appendChild(newsCard);
+    }
+}
+
 
 // async function login() {
 //     const username = document.getElementById('username').value;

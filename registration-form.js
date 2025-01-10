@@ -70,7 +70,7 @@ function collectFormData() {
 // Function to send a POST request to register a team
 async function registerTeam(teamData) {
     try {
-        const registrationEndpoint = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/add';
+        const registrationEndpoint = 'http://localhost:8000/api/v1/teams/add';
         const response = await fetch(registrationEndpoint, {
             method: 'POST',
             headers: {

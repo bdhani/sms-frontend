@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 // Function to fetch leaderboard data
 async function fetchLeaderboard() {
     try {
-        const leaderboardEndpoint = 'https://stock-market-simulator-qn698.ondigitalocean.app/api/v1/teams/getLeaderboard';
+        const leaderboardEndpoint = 'http://localhost:8000/api/v1/teams/getLeaderboard';
         const response = await fetch(leaderboardEndpoint);
         const data = await response.json();
         return data.data;
