@@ -50,7 +50,7 @@ async function fetchData(allLogs) {
     }
 }
 */
-
+/*
 async function updateChart() {
     const newData = await fetchData(false);
     if (newData && newData.data && newData.data.logs.length > 0) {
@@ -88,8 +88,61 @@ async function updateChart() {
         console.error('No new data available to update the chart.');
     }
 }
+*/
 
+async function updateChart() {
+    const newData = await fetchData(false);
+    if (newData && newData.data && newData.data.logs.length > 0) {
+        // Filter logs for January 2024
+        const januaryLogs = newData.data.logs.filter(log => {
+            const date = new Date(log.createdAt);
+            return date.getFullYear() === 2024 && date.getMonth() === 0; // January is month 0
+        });
 
+        if (januaryLogs.length > 0) {
+            const latestLog = januaryLogs[januaryLogs.length - 1];
+            const tim = new Date(latestLog.createdAt);
+            const price = latestLog.price;
+
+            // Extend the existing chart traces with new data
+            Plotly.extendTraces('stockPriceChart', {
+                x: [[tim]],
+                y: [[price]],
+            }, [0]);
+
+            // Dynamically adjust the x-axis range to focus on recent data
+            const startDate = new Date(2024, 0, 1); // January 1, 2024
+            const endDate = new Date(2024, 0, 31); // January 31, 2024
+            Plotly.relayout('stockPriceChart', {
+                'xaxis.range': [startDate, endDate]
+            });
+
+            // Update other DOM elements
+            document.getElementById('companyName').innerText = newData.data.companyName;
+            document.getElementById('price').innerText = `₹${newData.data.sellingPrice.toFixed(2)}`;
+        } else {
+            console.warn('No transactions found for January 2024.');
+
+            // Extend the chart with the current timestamp and the last known price
+            const lastPrice = newData.data.sellingPrice;
+            Plotly.extendTraces('stockPriceChart', {
+                x: [[new Date()]], // Current time
+                y: [[lastPrice]], // Last known price
+            }, [0]);
+        }
+    } else {
+        console.error('No new data available to update the chart.');
+
+        // Extend the chart with the current timestamp and the last known price
+        const lastPrice = chartData[0].y[chartData[0].y.length - 1];
+        if (lastPrice !== undefined) {
+            Plotly.extendTraces('stockPriceChart', {
+                x: [[new Date()]], // Current time
+                y: [[lastPrice]], // Last known price
+            }, [0]);
+        }
+    }
+}
 
 // Function to create the chart
 async function createChart() {
